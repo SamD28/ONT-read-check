@@ -1,0 +1,10 @@
+[package]
+name = "read_check"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.5.56", features = ["derive"] }
+flate2 = "1.1.8"
+noodles = { version = "0.104.0", features = ["fastq", "async"]}
+rustc-hash = "2.1.1"
