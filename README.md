@@ -15,3 +15,6 @@ by adding
 ```
 
 Will hash 32mers into a hashmap to calculate depth and therefore estimated genome size for assemblers
+
+Used in:
+https://github.com/SamD28/auto-autocycler-nf
