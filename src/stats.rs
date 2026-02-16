@@ -130,25 +130,24 @@ impl FastqStats {
     pub fn to_yaml(&self) -> String {
         let mut yaml = String::new();
 
-        yaml.push_str("FastqStats:\n");
-        yaml.push_str(&format!("  total_reads: {}\n", self.total_reads));
-        yaml.push_str(&format!("  total_bases: {}\n", self.total_bases));
+        yaml.push_str(&format!("total_reads: {}\n", self.total_reads));
+        yaml.push_str(&format!("total_bases: {}\n", self.total_bases));
 
         if let Some(n50) = self.n50 {
-            yaml.push_str(&format!("  n50: {}\n", n50));
+            yaml.push_str(&format!("n50: {}\n", n50));
         } else {
-            yaml.push_str("  n50: null\n");
+            yaml.push_str("n50: null\n");
         }
 
         if let Some(genome_size) = self.genome_size {
-            yaml.push_str(&format!("  genome_size: {}\n", genome_size));
+            yaml.push_str(&format!("genome_size: {}\n", genome_size));
         } else {
-            yaml.push_str("  genome_size: null\n");
+            yaml.push_str("genome_size: null\n");
         }
 
-        yaml.push_str(&format!("  unique_kmers: {}\n", self.kmer_counts.len()));
+        yaml.push_str(&format!("unique_kmers: {}\n", self.kmer_counts.len()));
         yaml.push_str(&format!(
-            "  unique_read_lengths: {}\n",
+            "unique_read_lengths: {}\n",
             self.length_counts.len()
         ));
 
