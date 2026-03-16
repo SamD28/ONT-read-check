@@ -1,7 +1,6 @@
 use rustc_hash::{FxBuildHasher, FxHashMap};
 
 const K: usize = 21;
-const MIN_VALID_DEPTH: usize = 10; //huristic so just don't let it be affected by low depth reads (ONT HIGH ERROR)
 
 #[derive(Debug)]
 pub struct FastqStats {
@@ -111,14 +110,22 @@ impl FastqStats {
         let mut depth_hist: FxHashMap<usize, usize> = FxHashMap::default();
 
         for &count in self.kmer_counts.values() {
-            if count > 1 {
-                *depth_hist.entry(count).or_insert(0) += 1;
-            }
+            *depth_hist.entry(count).or_insert(0) += 1;
         }
 
-        let peak_depth = depth_hist
+        let mut depths: Vec<(usize, usize)> = depth_hist.into_iter().collect();
+        depths.sort_unstable_by_key(|(depth, _)| *depth);
+
+        // Find the valley between error peak and genome peak
+        let valley_depth = depths
+            .windows(2)
+            .find(|w| w[1].1 >= w[0].1)
+            .map(|w| w[0].0)
+            .unwrap_or(0);
+
+        let peak_depth = depths
             .iter()
-            .filter(|&(&depth, _)| depth >= MIN_VALID_DEPTH)
+            .filter(|(depth, _)| *depth > valley_depth)
             .max_by_key(|(_, freq)| *freq)
             .map(|(depth, _)| *depth)
             .unwrap();
