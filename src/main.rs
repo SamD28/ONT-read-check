@@ -12,6 +12,9 @@ struct Cli {
 
     #[arg(short, long)]
     genome_size: bool,
+
+    #[arg(short, long)]
+    output: Option<String>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -33,8 +36,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         stats.calculate_genome_size();
     }
 
-    fs::write("read_stats.yaml", stats.to_yaml())
-        .expect("Should be able to write to `read_stats.yaml`");
+    let output_path = args.output.unwrap_or_else(|| "read_stats.yaml".to_string());
+
+    fs::write(&output_path, stats.to_yaml())
+        .expect("Should be able to write to the specified output file");
 
     Ok(())
 }
